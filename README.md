@@ -4,6 +4,15 @@
 
 NestJS Framework Boilerplate
 
+## Deploy
+
+package.json에 정의된 아래의 명령어는 heroku에 배포를 위함
+
+```json:package.json
+"prestart:prod": "rimraf dist && yarn build",
+"web": "yarn start:prod",
+```
+
 ## Need to know before coding Nest.js
 
 1. Dto가 작동하게 만들기 위해서는 Dto class에 적절한 데코레이터를 넣고, Controller에서 @UsePipe(ValidationPipe)를 씌어줘야한다

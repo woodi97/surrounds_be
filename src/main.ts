@@ -27,6 +27,7 @@ export async function bootstrap(): Promise<NestExpressApplication> {
     },
   );
 
+  app.enableCors();
   app.enable('trust proxy'); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
   app.use(helmet());
   app.setGlobalPrefix(process.env.API_PREFIX ?? '/api');
