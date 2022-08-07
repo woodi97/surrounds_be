@@ -22,12 +22,26 @@ export async function bootstrap(): Promise<NestExpressApplication> {
   const app = await NestFactory.create<NestExpressApplication>(
     AppModule,
     new ExpressAdapter(),
-    {
-      cors: true,
-    },
   );
 
-  app.enableCors();
+  const whitelist = new Set([
+    'http://localhost:10000',
+    'https://surrounds-fe.vercel.app',
+  ]);
+
+  app.enableCors({
+    origin(origin, callback) {
+      if (!origin || whitelist.has(origin)) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        callback(undefined, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    credentials: true,
+  });
+
   app.enable('trust proxy'); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
   app.use(helmet());
   app.setGlobalPrefix(process.env.API_PREFIX ?? '/api');
