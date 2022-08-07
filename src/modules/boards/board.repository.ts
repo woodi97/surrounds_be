@@ -5,6 +5,7 @@ import type { UserEntity } from '../user/user.entity';
 import { BoardEntity } from './board.entity';
 import type { BoardStatus } from './board-status.enum';
 import type { CreateBoardDto } from './dto/create-board.dto';
+import type { BoardCreateResultType } from './type/board-create-result.type';
 
 @EntityRepository(BoardEntity)
 export class BoardRepository extends Repository<BoardEntity> {
@@ -31,7 +32,7 @@ export class BoardRepository extends Repository<BoardEntity> {
   async createBoard(
     createBoardDto: CreateBoardDto,
     user: UserEntity,
-  ): Promise<BoardEntity> {
+  ): Promise<BoardCreateResultType> {
     const newBoard: BoardEntity = this.create({
       ...createBoardDto,
       user,
@@ -39,7 +40,12 @@ export class BoardRepository extends Repository<BoardEntity> {
 
     await this.save(newBoard);
 
-    return newBoard;
+    return {
+      id: newBoard.id,
+      title: newBoard.title,
+      description: newBoard.description,
+      status: newBoard.status,
+    };
   }
 
   async updateBoardStatus(

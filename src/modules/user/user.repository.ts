@@ -9,7 +9,8 @@ import { UserEntity } from './user.entity';
 @EntityRepository(UserEntity)
 export class UserRepository extends Repository<UserEntity> {
   async createUser(authCredentialsDto: AuthCredentialDto): Promise<void> {
-    const { username, email, password, profileImage } = authCredentialsDto;
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { username, email, password, profile_image } = authCredentialsDto;
 
     const salt = await genSalt();
     const hashedPassword = await hash(password, salt);
@@ -18,7 +19,7 @@ export class UserRepository extends Repository<UserEntity> {
       username,
       email,
       password: hashedPassword,
-      profile_image: profileImage || '',
+      profile_image: profile_image || '',
     });
 
     try {
@@ -30,7 +31,9 @@ export class UserRepository extends Repository<UserEntity> {
     }
   }
 
-  async validateUserPassword(signInAuthDto: SignInAuthDto): Promise<void> {
+  async validateUserPassword(
+    signInAuthDto: SignInAuthDto,
+  ): Promise<UserEntity> {
     const { email, password } = signInAuthDto;
 
     const result = await this.findOne({ email });
@@ -38,5 +41,7 @@ export class UserRepository extends Repository<UserEntity> {
     if (!(result && (await compare(password, result.password)))) {
       throw new UnauthorizedException('Invalid credentials');
     }
+
+    return result;
   }
 }

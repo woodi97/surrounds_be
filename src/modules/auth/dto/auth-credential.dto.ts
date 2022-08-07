@@ -21,7 +21,7 @@ export class AuthCredentialDto {
 
   @IsString()
   @IsOptional()
-  profileImage: string;
+  profile_image: string;
 
   @IsString()
   @IsNotEmpty()

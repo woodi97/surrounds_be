@@ -6,6 +6,7 @@ import type { BoardEntity } from './board.entity';
 import { BoardRepository } from './board.repository';
 import type { BoardStatus } from './board-status.enum';
 import type { CreateBoardDto } from './dto/create-board.dto';
+import type { BoardCreateResultType } from './type/board-create-result.type';
 
 @Injectable()
 export class BoardService {
@@ -24,7 +25,7 @@ export class BoardService {
   createBoard(
     createBoardDto: CreateBoardDto,
     user: UserEntity,
-  ): Promise<BoardEntity> {
+  ): Promise<BoardCreateResultType> {
     return this.boardRepository.createBoard(createBoardDto, user);
   }
 

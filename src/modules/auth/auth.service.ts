@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from '../user/user.repository';
 import type { AuthCredentialDto } from './dto/auth-credential.dto';
 import type { SignInAuthDto } from './dto/sign-in-auth-dto';
+import type { SignInResultType } from './type/signin-result.type';
 
 @Injectable()
 export class AuthService {
@@ -17,11 +18,16 @@ export class AuthService {
     return this.userRepository.createUser(authCredentialsDto);
   }
 
-  async signIn(signInAuthDto: SignInAuthDto): Promise<{ accessToken: string }> {
-    await this.userRepository.validateUserPassword(signInAuthDto);
-    const payload = { email: signInAuthDto.email };
+  async signIn(signInAuthDto: SignInAuthDto): Promise<SignInResultType> {
+    const user = await this.userRepository.validateUserPassword(signInAuthDto);
+    const payload = { email: user.email };
     const accessToken = this.jwtService.sign(payload);
 
-    return { accessToken };
+    return {
+      email: user.email,
+      username: user.username,
+      profile_image: user.profile_image,
+      access_token: accessToken,
+    };
   }
 }

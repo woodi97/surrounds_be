@@ -55,7 +55,7 @@ export class BoardController {
   createBoard(
     @Body() createBoardDto: CreateBoardDto,
     @GetUser() user: UserEntity,
-  ): Promise<BoardEntity> {
+  ) {
     return this.boardService.createBoard(createBoardDto, user);
   }
 

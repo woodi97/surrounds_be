@@ -66,6 +66,8 @@ export class ChatroomRepository extends Repository<ChatroomEntity> {
           'chatroom.title AS title',
           'chatroom.author AS author',
           'chatroom.author_profile_image AS author_profile_image',
+          'chatroom.latitude AS latitude',
+          'chatroom.longitude AS longitude',
           'ST_Distance(location, ST_SetSRID(ST_GeomFromGeoJSON(:origin), ST_SRID(location)))/1000 AS distance',
         ])
         .where(

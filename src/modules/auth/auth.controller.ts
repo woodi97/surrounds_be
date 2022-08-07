@@ -21,10 +21,10 @@ import { AuthService } from './auth.service';
 import { AuthCredentialDto } from './dto/auth-credential.dto';
 import { SignInAuthDto } from './dto/sign-in-auth-dto';
 import { GetUser } from './get-user.decorator';
-
-class AuthResponse {
-  accessToken: string;
-}
+import {
+  SignInResultType,
+  ValidateResultType,
+} from './type/signin-result.type';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -35,7 +35,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: UserEntity })
   @UseGuards(AuthGuard())
-  validateUser(@GetUser() user: UserEntity) {
+  validateUser(@GetUser() user: UserEntity): ValidateResultType {
     return {
       email: user.email,
       username: user.username,
@@ -55,11 +55,9 @@ export class AuthController {
   @Post('/signin')
   @HttpCode(HttpStatus.ACCEPTED)
   @ApiAcceptedResponse({
-    type: AuthResponse,
+    type: SignInResultType,
   })
-  signIn(
-    @Body(ValidationPipe) signInAuthDto: SignInAuthDto,
-  ): Promise<{ accessToken: string }> {
+  signIn(@Body(ValidationPipe) signInAuthDto: SignInAuthDto) {
     return this.authService.signIn(signInAuthDto);
   }
 }

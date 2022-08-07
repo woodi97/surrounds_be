@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Post,
+  Query,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -31,8 +32,10 @@ export class ChatroomController {
 
   @Get('/near')
   @ApiOkResponse()
-  @UsePipes(ValidationPipe)
-  getRoomByRange(@Body() getChatroomDto: GetChatroomDto) {
+  getRoomByRange(
+    @Query(ValidationPipe)
+    getChatroomDto: GetChatroomDto,
+  ) {
     return this.chatRoomService.getChatroomByRange(getChatroomDto);
   }
 

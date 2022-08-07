@@ -11,9 +11,6 @@ export type ChatroomResultType = Pick<
   | 'longitude'
 >;
 
-export type ChatroomResultByRangeType = Pick<
-  ChatroomEntity,
-  'id' | 'name' | 'title' | 'author' | 'author_profile_image'
-> & {
+export type ChatroomResultByRangeType = ChatroomResultType & {
   distance: number;
 };
