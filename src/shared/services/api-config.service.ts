@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import type { MongooseModuleOptions } from '@nestjs/mongoose';
 import type { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { isNil } from 'lodash';
 
@@ -25,13 +24,6 @@ export class ApiConfigService {
 
   get nodeEnv(): string {
     return this.getString('NODE_ENV');
-  }
-
-  get mongoConfig(): MongooseModuleOptions {
-    return {
-      uri: this.getString('MONGO_URI'),
-      dbName: this.getString('MONGO_DB_NAME'),
-    };
   }
 
   get postgresConfig(): TypeOrmModuleOptions {
@@ -85,11 +77,11 @@ export class ApiConfigService {
       logging: this.getBoolean('ENABLE_ORM_LOGS'),
       namingStrategy: new SnakeNamingStrategy(),
       synchronize: this.isTest,
-      extra: {
-        ssl: {
-          rejectUnauthorized: false,
-        },
-      },
+      ssl: this.getBoolean('DB_SSL')
+        ? {
+            rejectUnauthorized: false,
+          }
+        : false,
     };
   }
 
@@ -138,12 +130,12 @@ export class ApiConfigService {
   }
 
   private get(key: string): string {
-    const value = this.configService.get<string>(key);
+    const value = this.configService.get<string | undefined>(key);
 
     if (isNil(value)) {
       throw new Error(key + ' environment variable does not set'); // probably we should call process.exit() too to avoid locking the service
     }
 
-    return value;
+    return value ?? '';
   }
 }

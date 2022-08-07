@@ -21,12 +21,6 @@ import { SharedModule } from './shared/shared.module';
         configService.postgresConfig,
       inject: [ApiConfigService],
     }),
-    // MongooseModule.forRootAsync({
-    //   imports: [SharedModule],
-    //   useFactory: (configService: ApiConfigService) =>
-    //     configService.mongoConfig,
-    //   inject: [ApiConfigService],
-    // }),
     AuthModule,
     BoardModule,
     EventsModule,

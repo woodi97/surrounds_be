@@ -67,7 +67,7 @@ export async function bootstrap(): Promise<NestExpressApplication> {
   app.useWebSocketAdapter(new IoAdapter(app));
 
   const port = configService.appConfig.port;
-  await app.listen(port);
+  await app.listen(port || 3000);
   console.info(`server running on ${await app.getUrl()}`);
 
   return app;
