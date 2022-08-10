@@ -74,10 +74,20 @@ export class AuthService {
                 access_token: accessToken,
               });
             } catch (error_) {
-              if (error_.code === '23505') {
-                return reject(
-                  new UnauthorizedException('이미 가입된 이메일입니다.'),
-                );
+              if (
+                error_.status === 409 &&
+                error_.response.message === 'Email already exists'
+              ) {
+                const accessToken = this.jwtService.sign({
+                  email: payload.email,
+                });
+
+                return resolve({
+                  email: payload.email,
+                  username: payload.name,
+                  profile_image: '',
+                  access_token: accessToken,
+                });
               }
 
               return reject(new UnauthorizedException('카카오 로그인 실패'));
