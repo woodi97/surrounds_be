@@ -1,3 +1,4 @@
+import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
@@ -7,11 +8,15 @@ import { ApiConfigService } from '../../shared/services/api-config.service';
 import { UserRepository } from '../user/user.repository';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { JwtStrategy } from './jwt.strategy';
 import { passportConfig } from './passport.config';
+import { JwtStrategy } from './strategy/jwt.strategy';
+import { KakaoStrategy } from './strategy/kakao.strategy';
 
 @Module({
   imports: [
+    HttpModule.register({
+      timeout: 5000,
+    }),
     PassportModule.register(passportConfig),
     JwtModule.registerAsync({
       useFactory: (configService: ApiConfigService) => ({
@@ -34,7 +39,7 @@ import { passportConfig } from './passport.config';
     TypeOrmModule.forFeature([UserRepository]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
-  exports: [JwtStrategy, PassportModule],
+  providers: [AuthService, JwtStrategy, KakaoStrategy],
+  exports: [JwtStrategy, KakaoStrategy, PassportModule],
 })
 export class AuthModule {}

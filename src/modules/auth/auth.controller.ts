@@ -19,7 +19,7 @@ import {
 import { UserEntity } from '../user/user.entity';
 import { AuthService } from './auth.service';
 import { AuthCredentialDto } from './dto/auth-credential.dto';
-import { SignInAuthDto } from './dto/sign-in-auth-dto';
+import { SignInAuthDto, SignInKakaoDto } from './dto/sign-in-auth.dto';
 import { GetUser } from './get-user.decorator';
 import {
   SignInResultType,
@@ -59,5 +59,16 @@ export class AuthController {
   })
   signIn(@Body(ValidationPipe) signInAuthDto: SignInAuthDto) {
     return this.authService.signIn(signInAuthDto);
+  }
+
+  @Post('/signin/kakao')
+  @HttpCode(HttpStatus.ACCEPTED)
+  @ApiAcceptedResponse({
+    type: SignInResultType,
+  })
+  async signInKakao(@Body(ValidationPipe) signInKakaoDto: SignInKakaoDto) {
+    const result = await this.authService.signInKakao(signInKakaoDto);
+
+    return result;
   }
 }

@@ -8,6 +8,8 @@ import {
   MinLength,
 } from 'class-validator';
 
+import { UserVendorStatusEnum } from '../../user/user-vendor-status.enum';
+
 export class AuthCredentialDto {
   @IsEmail()
   @IsNotEmpty()
@@ -22,6 +24,10 @@ export class AuthCredentialDto {
   @IsString()
   @IsOptional()
   profile_image: string;
+
+  @IsString()
+  @IsOptional()
+  auth_vendor: UserVendorStatusEnum;
 
   @IsString()
   @IsNotEmpty()

@@ -26,6 +26,15 @@ export class ApiConfigService {
     return this.getString('NODE_ENV');
   }
 
+  get socialLoginConfig() {
+    return {
+      kakao: {
+        clientId: this.getString('KAKAO_CLIENT_ID'),
+        callbackUrl: this.getString('KAKAO_CALLBACK_URL'),
+      },
+    };
+  }
+
   get postgresConfig(): TypeOrmModuleOptions {
     let entities = [
       __dirname + '/../../modules/**/*.entity{.ts,.js}',
