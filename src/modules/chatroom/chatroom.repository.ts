@@ -39,8 +39,8 @@ export class ChatroomRepository extends Repository<ChatroomEntity> {
 
     return {
       id: chatroom.id,
-      name: chatroom.name,
       title: chatroom.title,
+      description: chatroom.description,
       latitude: chatroom.latitude,
       longitude: chatroom.longitude,
       author: chatroom.author,
@@ -62,8 +62,8 @@ export class ChatroomRepository extends Repository<ChatroomEntity> {
       await this.createQueryBuilder('chatroom')
         .select([
           'chatroom.id AS id',
-          'chatroom.name AS name',
           'chatroom.title AS title',
+          'chatroom.description AS description',
           'chatroom.author AS author',
           'chatroom.author_profile_image AS author_profile_image',
           'chatroom.latitude AS latitude',
@@ -120,8 +120,8 @@ export class ChatroomRepository extends Repository<ChatroomEntity> {
 
     return {
       id: newChatroom.id,
-      name: newChatroom.name,
       title: newChatroom.title,
+      description: newChatroom.description,
       author: newChatroom.author,
       author_profile_image: newChatroom.author_profile_image,
       latitude: newChatroom.latitude,

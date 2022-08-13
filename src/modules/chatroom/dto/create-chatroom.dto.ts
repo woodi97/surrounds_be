@@ -3,11 +3,11 @@ import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 export class CreateChatroomDto {
   @IsNotEmpty()
   @IsString()
-  name: string;
+  title: string;
 
   @IsNotEmpty()
   @IsString()
-  title: string;
+  description: string;
 
   @IsNotEmpty()
   @IsNumber()

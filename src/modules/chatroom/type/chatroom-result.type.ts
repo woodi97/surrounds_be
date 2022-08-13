@@ -3,8 +3,8 @@ import type { ChatroomEntity } from '../chatroom.entity';
 export type ChatroomResultType = Pick<
   ChatroomEntity,
   | 'id'
-  | 'name'
   | 'title'
+  | 'description'
   | 'author'
   | 'author_profile_image'
   | 'latitude'

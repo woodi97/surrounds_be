@@ -16,10 +16,10 @@ export class ChatroomEntity extends BaseEntity {
   id: string;
 
   @Column()
-  name: string;
+  title: string;
 
   @Column()
-  title: string;
+  description: string;
 
   @Column()
   author: string;
