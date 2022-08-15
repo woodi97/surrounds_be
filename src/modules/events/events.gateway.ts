@@ -24,34 +24,22 @@ export class EventsGateway
 
   @SubscribeMessage('message')
   handleMessage(client: Socket, payload: { name: string; text: string }): void {
+    EventsGateway.logger.debug('Message received', payload);
     this.server.emit('msgToClient', payload);
   }
 
-  //   socket.on("join-room", (roomId, peerId) => {
-  //     console.log("someone joined room", roomId, peerId);
-  //     socket.join(roomId);
-  //     socket.broadcast.to(roomId).emit("user-connected", peerId);
-  //   });
-  //
-  //   socket.on("leave-room", (leavedPeerId, roomId) => {
-  //     console.log("someone left room", leavedPeerId, roomId);
-  //     socket.leave(roomId);
-  //     socket.broadcast.to(roomId).emit("leave-room", leavedPeerId);
-  //   });
-  //
-  //   // socket.emit("me", socket.id);
-  //
-  //   // socket.on("disconnect", () => {
-  //   //   socket.broadcast.emit("callended");
-  //   // });
-  //
-  //   // socket.on("calluser", ({ userToCall, signalData, from, name }) => {
-  //   //   io.to(userToCall).emit("calluser", { signal: signalData, from, name });
-  //   // });
-  //
-  //   // socket.on("answercall", (data) => {
-  //   //   io.to(data.to).emit("callaccepted", data.signal);
-  //   // });
+  @SubscribeMessage('join')
+  handleJoin(client: Socket, payload: { peerId: string }) {
+    // block the user if room already full(max 5 users)
+    if (Object.keys(onlineMap[client.nsp.name]).length >= 5) {
+      client.emit('message', 'Room is full');
+
+      return;
+    }
+
+    EventsGateway.logger.debug('Client joined', payload);
+    client.broadcast.emit('joinToClient', payload);
+  }
 
   afterInit() {
     EventsGateway.logger.debug('Socket Server Init Complete');
@@ -63,6 +51,8 @@ export class EventsGateway
     if (!onlineMap[socket.nsp.name]) {
       onlineMap[socket.nsp.name] = {};
     }
+
+    onlineMap[socket.nsp.name][socket.id] = socket.id;
 
     socket.emit('message', socket.nsp.name);
   }

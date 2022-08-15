@@ -26,6 +26,8 @@ export async function bootstrap(): Promise<NestExpressApplication> {
 
   const whitelist = new Set([
     'http://localhost:10000',
+    'https://localhost:10000',
+    'https://192.168.35.123:10000',
     'https://surrounds-fe.vercel.app',
   ]);
 

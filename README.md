@@ -13,6 +13,10 @@ package.json에 정의된 아래의 명령어는 heroku에 배포를 위함
 "web": "yarn start:prod",
 ```
 
+## Todo:
+
+1. Events Gateway에서 클라이언트가 5명 이상 들어오려고 할때 block하는 이벤트를 추가하기
+
 ## Need to know before coding Nest.js
 
 1. Dto가 작동하게 만들기 위해서는 Dto class에 적절한 데코레이터를 넣고, Controller에서 @UsePipe(ValidationPipe)를 씌어줘야한다
