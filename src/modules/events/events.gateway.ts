@@ -32,10 +32,13 @@ export class EventsGateway
   handleJoin(client: Socket, payload: { peerId: string }) {
     // block the user if room already full(max 5 users)
     if (Object.keys(onlineMap[client.nsp.name]).length >= 5) {
-      client.emit('message', 'Room is full');
+      client.emit('errorToClient', 'Room is full');
 
       return;
     }
+
+    // renew onlineMap(socketId : peerId)
+    onlineMap[client.nsp.name][client.id] = payload.peerId;
 
     EventsGateway.logger.debug('Client joined', payload);
     client.broadcast.emit('joinToClient', payload);
@@ -60,8 +63,11 @@ export class EventsGateway
   handleDisconnect(@ConnectedSocket() socket: Socket) {
     EventsGateway.logger.debug('Client disconnected');
     const newNamespace = socket.nsp;
+    // newNamespace.emit('onlineList', Object.values(onlineMap[socket.nsp.name]));
+    newNamespace.emit('leaveToClient', {
+      peerId: onlineMap[socket.nsp.name][socket.id],
+    });
+
     delete onlineMap[socket.nsp.name][socket.id];
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    newNamespace.emit('onlineList', Object.values(onlineMap[socket.nsp.name]));
   }
 }
