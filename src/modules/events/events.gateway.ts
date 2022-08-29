@@ -31,13 +31,12 @@ export class EventsGateway
   @SubscribeMessage('join')
   handleJoin(client: Socket, payload: { peerId: string }) {
     // block the user if room already full(max 5 users)
-    if (Object.keys(onlineMap[client.nsp.name]).length >= 5) {
+    if (Object.keys(onlineMap[client.nsp.name]).length >= 8) {
       client.emit('errorToClient', 'Room is full');
 
       return;
     }
 
-    // renew onlineMap(socketId : peerId)
     onlineMap[client.nsp.name][client.id] = payload.peerId;
 
     EventsGateway.logger.debug('Client joined', payload);
