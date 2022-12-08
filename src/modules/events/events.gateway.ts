@@ -29,7 +29,10 @@ export class EventsGateway
   }
 
   @SubscribeMessage('coordinate')
-  handleCoordinate(client: Socket, payload: { x: string; z: string }): void {
+  handleCoordinate(
+    client: Socket,
+    payload: { clientId: string; x: string; z: string },
+  ): void {
     EventsGateway.logger.debug('Coordinate received', payload);
     this.server.emit('coordinateToClient', payload);
   }
