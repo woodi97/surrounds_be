@@ -28,6 +28,12 @@ export class EventsGateway
     this.server.emit('msgToClient', payload);
   }
 
+  @SubscribeMessage('coordinate')
+  handleCoordinate(client: Socket, payload: { x: string; z: string }): void {
+    EventsGateway.logger.debug('Coordinate received', payload);
+    this.server.emit('coordinateToClient', payload);
+  }
+
   @SubscribeMessage('join')
   handleJoin(client: Socket, payload: { peerId: string }) {
     // block the user if room already full(max 5 users)
